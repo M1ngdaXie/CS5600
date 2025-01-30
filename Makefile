@@ -1,24 +1,24 @@
-# Makefile for Caesar Cipher
-
 # Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99
 
-# Target executable
-TARGET = caesar
-
-# Source files
-SRCS = caesar_main.c caesar.c
-
-# Object files (generated from source files)
-OBJS = $(SRCS:.c=.o)
+# Targets
+TARGETS = caesar queue ciphered_queue
 
 # Default rule
-all: $(TARGET)
+all: $(TARGETS)
 
-# Rule to build the target executable
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+# Caesar cipher
+caesar: caesar_main.o caesar.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Queue
+queue: queue_main.o queue.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Ciphered queue
+ciphered_queue: ciphered_queue_main.o queue.o caesar.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Rule to compile .c files into .o files
 %.o: %.c
@@ -26,6 +26,6 @@ $(TARGET): $(OBJS)
 
 # Clean up build files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f *.o $(TARGETS)
 
 .PHONY: all clean
